@@ -1,9 +1,9 @@
-# ignore the input and output directories
-ai_core/input/
-ai_core/output/
+# Ignore the inputs and outputs directories
+ai_core/inputs/
+ai_core/outputs/
 
-# ignore the venv directory
+# Ignore the virtual environment
 venv/
 
-# ignore the .env file
+# Ignore environment variable files
 .env
