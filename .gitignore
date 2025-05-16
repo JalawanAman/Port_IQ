@@ -1,2 +1,9 @@
+# ignore the input and output directories
+input/
+output/
+
 # ignore the venv directory
 venv/
+
+# ignore the .env file
+.env
