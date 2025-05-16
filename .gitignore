@@ -1,6 +1,6 @@
 # ignore the input and output directories
-input/
-output/
+ai_core/input/
+ai_core/output/
 
 # ignore the venv directory
 venv/
