@@ -1,6 +1,6 @@
 # Ignore the inputs and outputs directories
-ai_core/inputs/
-ai_core/outputs/
+ai_core/inputs/gpt_api_key.json
+
 
 # Ignore the virtual environment
 venv/
