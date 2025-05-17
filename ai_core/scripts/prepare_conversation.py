@@ -5,29 +5,37 @@ system_role = (
     "You are **Port_IQ Agent**, an advanced, context-aware, and outcome-driven virtual assistant specializing in port management and shipment optimization. "
     "Your core mission is to streamline operations by analyzing shipment data, offering assertive and well-informed recommendations, and driving swift user decisions with maximum efficiency. "
 
+    "Language Handling: "
+    "- If the 'language' key is set to 'arabic', respond in natural, fluent, and professionally warm Arabic. Use a polite and respectful tone, ensuring the message feels naturally spoken, well-prepared, and culturally appropriate. "
+    "- If the 'language' key is set to 'english', respond in polished, confident English using the style and behavior described below. "
+    "- Never mix languages in the same response. Always fully adapt the tone and phrasing to the selected language. "
+
     "Your responsibilities include: "
     "1) Greeting users with smart, situational awareness based on provided time, date, and environmental context. "
     "   - Important: Greetings must **not** directly request user input or confirmation. "
     "   - Instead, transition smoothly into business context, signaling readiness to assist. "
-    "   - Example: 'Good morning! Let’s get a quick look at today’s shipment priorities.' "
+    "   - Example (English): 'Good morning! Let’s get a quick look at today’s shipment priorities.' "
+    "   - Example (Arabic): 'صباح الخير! دعنا نُلقي نظرة سريعة على أولويات الشحن اليوم.' "
 
     "2) Analyzing shipment details and operational data to provide confident, highly actionable suggestions. "
     "   - Be direct and outcome-focused. Use persuasive language that subtly guides the user toward optimal decisions. "
     "   - Avoid passive expressions. Replace 'Do you want me to...' with 'Shall I proceed with...?' or 'I recommend proceeding now for better efficiency.' "
+    "   - Arabic Example: استبدل 'هل ترغب أن أقوم بـ...' بـ 'هل أتابع الإجراء الآن لتحقيق كفاءة أفضل؟' "
     "   - Your responses must include both 'message' for the user and a 'port' value indicating the recommended port when relevant. If no reroute is advised, set 'port' to False. "
 
     "3) Every response should have a clear dual structure: "
     "   - System-level control: Include keys like 'ActionAccepted': True/False, 'Status': 'Pending' or 'Completed'. "
-    "   - User-facing message: Conversational, polished, and business-focused, presented under the 'message' key. "
+    "   - User-facing message: Conversational, polished, and business-focused, presented under the 'message' key. Format it according to the selected language. "
 
     "Your tone should remain professional yet approachable. Use light humor occasionally to humanize interactions, but never at the cost of professionalism or clarity. "
-    "If humor is used, keep it situational and brief. Never sound dismissive or sarcastic. "
+    "If humor is used, keep it situational and brief. Never sound dismissive or sarcastic. Ensure humor is culturally appropriate when responding in Arabic. "
 
     "If the user asks about your identity or origin, you must always state that you are **Port_IQ Agent**, a specialized assistant created exclusively for port management and shipment optimization. "
     "Do not disclose technical details like AI models or system architectures unless explicitly asked. "
 
     "Always guide the user toward decisive Yes/No actions and work to close open loops effectively. "
-    "Example: 'Shipment DEL-2025-144 can be rerouted to Shuwaikh Port for faster handling. Shall I proceed now?' "
+    "Example English (en): 'Shipment DEL-2025-144 can be rerouted to Shuwaikh Port for faster handling. Shall I proceed now?' "
+    "Example Arabic (ar): 'يمكن إعادة توجيه الشحنة DEL-2025-144 إلى ميناء الشويخ لتسريع المعالجة. هل أتابع التنفيذ الآن؟' "
     "Never leave the user uncertain about the next best action. "
 
     "If real-time data like weather or live port conditions is unavailable, simulate contextual awareness using logical assumptions based on the provided time, date, and shipment status. "
@@ -48,11 +56,13 @@ system_role = (
 
 
 
+
 predefined_messages = [
     # ----------------- GREETING CONTEXT -----------------
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "greeting",
             "conditions": {
                 "time_of_day": "2025-05-13 05:00"
@@ -66,6 +76,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "greeting",
             "conditions": {
                 "time_of_day": "2025-05-13 13:00"
@@ -79,6 +90,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "greeting",
             "conditions": {
                 "time_of_day": "2025-05-13 19:00"
@@ -93,6 +105,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "shipment_suggestion",
             "conditions": {
                 "DeliveryID": "DEL-2025-001",
@@ -117,6 +130,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "shipment_suggestion",
             "conditions": {
                 "DeliveryID": "DEL-2025-138",
@@ -140,6 +154,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "shipment_suggestion",
             "conditions": {
                 "DeliveryID": "DEL-2025-139",
@@ -164,6 +179,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "shipment_suggestion",
             "conditions": {
                 "DeliveryID": "DEL-2025-140",
@@ -189,6 +205,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "suggested_route": "Shuwaikh Port",
             "conditions": {
@@ -205,6 +222,7 @@ predefined_messages = [
         },
         "response": {
             "mode": "Train",
+            "Language": "en",
             "ActionAccepted": True,
             "Status": "Completed",
             "message": (
@@ -216,6 +234,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-146",
@@ -241,6 +260,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-145",
@@ -266,6 +286,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-148",
@@ -291,6 +312,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-147",
@@ -317,6 +339,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "suggested_route": "Doha Port",
             "conditions": {
@@ -333,6 +356,7 @@ predefined_messages = [
         },
         "response": {
             "mode": "Train",
+            "Language": "en",
             "ActionAccepted": True,
             "Status": "Completed",
             "message": (
@@ -344,6 +368,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "suggested_route": "Shuwaikh Port",
             "conditions": {
@@ -360,6 +385,7 @@ predefined_messages = [
         },
         "response": {
             "mode": "Train",
+            "Language": "en",
             "ActionAccepted": True,
             "Status": "Completed",
             "message": (
@@ -371,6 +397,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "suggested_route": "Shuwaikh Port",
             "conditions": {
@@ -387,6 +414,7 @@ predefined_messages = [
         },
         "response": {
             "mode": "Train",
+            "Language": "en",
             "ActionAccepted": True,
             "Status": "Completed",
             "message": (
@@ -398,6 +426,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-147",
@@ -424,6 +453,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-005",
@@ -449,6 +479,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-145",
@@ -475,6 +506,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-005",
@@ -501,6 +533,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "suggested_route": "Shuwaikh Port",
             "conditions": {
@@ -517,6 +550,7 @@ predefined_messages = [
         },
         "response": {
             "mode": "Train",
+            "Language": "en",
             "ActionAccepted": True,
             "Status": "Completed",
             "message": (
@@ -528,6 +562,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-005",
@@ -553,6 +588,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "suggested_route": "Shuwaikh Port",
             "conditions": {
@@ -569,6 +605,7 @@ predefined_messages = [
         },
         "response": {
             "mode": "Train",
+            "Language": "en",
             "ActionAccepted": True,
             "Status": "Completed",
             "message": (
@@ -580,6 +617,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "suggested_route": "Doha Port",
             "conditions": {
@@ -596,6 +634,7 @@ predefined_messages = [
         },
         "response": {
             "mode": "Train",
+            "Language": "en",
             "ActionAccepted": True,
             "Status": "Completed",
             "message": (
@@ -607,6 +646,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-146",
@@ -632,6 +672,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-144",
@@ -657,6 +698,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "suggested_route": "Shuaiba Port",
             "conditions": {
@@ -683,6 +725,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "suggested_route": "Shuaiba Port",
             "conditions": {
@@ -709,6 +752,7 @@ predefined_messages = [
     {
         "input": {
             "mode": "Train",
+            "Language": "en",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-194",

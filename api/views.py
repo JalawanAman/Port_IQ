@@ -4,12 +4,13 @@ from django.views.decorators.http import require_http_methods
 import json
 
 from ai_core.scripts.gen_response import generate_response_main, process_input, get_shipment_data
-from ai_core.scripts.helper_methods import  generate_random_eta, update_shipment_entry
+from ai_core.scripts.helper_methods import  generate_random_eta, update_shipment_entry, trans_to_shipment_ar, to_ar
 
 @csrf_exempt
 @require_http_methods(["GET", "POST", "OPTIONS"])
 def chat(request):
     try:
+        print("\n----------------------------------------------------------------------------------------------\n\n")
         # Handle CORS Preflight Requests
         if request.method == "OPTIONS":
             response = JsonResponse({"status": "ok"})
@@ -37,24 +38,37 @@ def chat(request):
         # Default dummy result
         
         print(f"response_value={response_value}, {type(response_value)}")
-
-            
+        
+        pref_lang = response_value['lang']
+        shipment_id = response_value['shipment_id']
+        if shipment_id == False:
+            shipment_id = None
+        
         # Business logic based on 'user_input'
         if isinstance(response_value, dict) and response_value['user_input'] == False:
             # Process greeting and shipment suggestions
-            input_gred, shipment_details, fuc, fuc_name = process_input(details={"mode": "greeting"}, shipment_id=None)
-            input_shipment, shipment_details, fuc, fuc_name = process_input(details={"mode": "shipment_suggestion"}, shipment_id=None, gen_shipment_data=True)
+            input_gred, shipment_details, fuc, fuc_name = process_input(details={"mode": "greeting", "Language": pref_lang}, shipment_id=shipment_id)
+            input_shipment, shipment_details, fuc, fuc_name = process_input(details={"mode": "shipment_suggestion",  "Language": pref_lang}, shipment_id=shipment_id, gen_shipment_data=True)
+            
+            if not shipment_details:
+               print("[Eror] Shipment details are empty!")
             
             print("input_gred: ", input_gred)
             print("input_shipment: ", input_shipment)
             
-            greet_res = generate_response_main(input_gred, fuc, fuc_name)['message']
-            suggestion_res = generate_response_main(input_shipment, fuc, fuc_name)
-            
-            
             notifications = {
                 "shipment_status_updates": f"Container {shipment_details['Container']} has left port.",
                 }
+
+            
+            if pref_lang == 'ar':
+                shipment_details = trans_to_shipment_ar(shipment_details)
+                notifications['shipment_status_updates'] = to_ar(notifications['shipment_status_updates'])
+                
+            
+            
+            greet_res = generate_response_main(input_gred, fuc, fuc_name)['message']
+            suggestion_res = generate_response_main(input_shipment, fuc, fuc_name)
             
             result = {
                 "delivery_details": shipment_details,
@@ -67,13 +81,14 @@ def chat(request):
         if isinstance(response_value, dict) and isinstance(response_value['user_input'], str):
             # Direct response based on user input
             # direct_response = generate_response_main(response_value)
-            input_action, shipment_details, fuc, fuc_name = process_input(details={"mode": "action_response", "user_response": response_value['user_input'], "suggested_port": response_value['suggested_port']}, shipment_id= response_value['shipment_id'] )
+            input_action, shipment_details, fuc, fuc_name = process_input(details={"mode": "action_response", "Language": pref_lang, "user_response": response_value['user_input'], "suggested_port": response_value['suggested_port']}, shipment_id= shipment_id )
             action_res_dict = generate_response_main(input_action, fuc, fuc_name)
             
             ActionAccepted = action_res_dict.get("ActionAccepted", False)
             status = action_res_dict.get("Status", "Pending")
             message = action_res_dict.get("message", "No message provided")
             
+            shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
             
             print(ActionAccepted, status)
             if ActionAccepted:
@@ -91,12 +106,16 @@ def chat(request):
                 "rerouted_alert": rerouted_alert,
                 }
             
+            if pref_lang == 'ar':
+                notifications['shipment_status_updates'] = to_ar(notifications['shipment_status_updates'])
+                if rerouted_alert:
+                    notifications['rerouted_alert'] = to_ar(rerouted_alert)
             
             updated_eta = generate_random_eta(shipment_details['ETA'])
             if ActionAccepted:
                 shipment_details['Route'] = response_value['suggested_port']
                 shipment_details['ETA'] = updated_eta
-                shipment_details['Status'] = "In Progress"
+                shipment_details['Status'] = 'في تَقَدم' if pref_lang == 'ar' else 'In Progress'
                 
             else:
                 shipment_details= get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])

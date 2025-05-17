@@ -73,7 +73,7 @@ def get_shipment_data(file_path="./ai_core/outputs/shipment_data.json", rand_mod
     except json.JSONDecodeError:
         print(f"Error: Invalid JSON format in file {file_path}")
         return None
-
+   
     # Return random shipment if rand_mode is True
     if rand_mode:
         return random.choice(data)
@@ -158,12 +158,13 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
     final_functions = {}
     
     
-    if gen_shipment_data:
+    if gen_shipment_data and not shipment_id:
         status = generate_port_shipment_data(shipment_json_data_file)
         if not status:
             return False
         
     mode = details.get("mode")
+    lang = details.get("Language")
     input = {}
     shipment_details = {}
     
@@ -171,6 +172,7 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
         kuwait_time_str = datetime.now(pytz.timezone('Asia/Kuwait')).strftime('%Y-%m-%d %H:%M:%S')
         input =  {
             "mode": "Prod",
+            "Language": lang,
             "context": "greeting",
             "conditions": {
                 "time_of_day": kuwait_time_str
@@ -181,18 +183,23 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
     if mode == 'shipment_suggestion':
         if shipment_id is None:
             shipment_details = get_shipment_data()
-            print(shipment_details)
+        else:    
+            shipment_details = get_shipment_data(rand_mode=False, shipment_id=shipment_id)
+            
         input =  {
             "mode": "Prod",
+            "Language": lang,
             "context": "shipment_suggestion",
             "conditions": shipment_details
         }
         final_functions = f_call_sugg
     
     if mode == 'action_response':
+        
         shipment_details = get_shipment_data(rand_mode=False, shipment_id=shipment_id)
         input =  {
             "mode": "Prod",
+            "Language": lang,
             "context": "action_response",
             "suggested_route": details.get("suggested_port"),
             "conditions": shipment_details,

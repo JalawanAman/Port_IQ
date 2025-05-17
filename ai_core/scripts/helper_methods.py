@@ -3,6 +3,7 @@ import random
 import re
 import os
 import json
+from deep_translator import GoogleTranslator
 
 def flatten_input_dict(input_dict, parent_key=''):
     parts = []
@@ -82,3 +83,25 @@ def update_shipment_entry( updated_entry, file_path="./ai_core/outputs/shipment_
     except Exception as e:
         print(f"Error updating shipment entry: {e}")
         return False
+    
+def to_ar(given, prefferd_lang='ar'):
+    
+    source = 'en'
+    if prefferd_lang == 'en':
+        source = 'ar'
+        
+    translated = GoogleTranslator(source=source, target=prefferd_lang).translate(given)
+    return translated
+    
+def trans_to_shipment_ar(shipment_details, prefferd_lang='ar'):
+    
+    try:
+        
+        shipment_details['Port'] = to_ar(shipment_details['Port'], prefferd_lang)
+        shipment_details['Status'] = to_ar(shipment_details['Status'], prefferd_lang)
+        shipment_details['Route'] = to_ar(shipment_details['Route'], prefferd_lang)
+        
+        return shipment_details
+    except Exception as e:
+        raise e
+    
