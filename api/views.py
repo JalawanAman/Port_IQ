@@ -5,6 +5,11 @@ import json
 
 from ai_core.scripts.gen_response import generate_response_main, process_input, get_shipment_data
 from ai_core.scripts.helper_methods import  generate_random_eta, update_shipment_entry, trans_to_shipment_ar, to_ar
+from django.conf import settings
+from django.http import JsonResponse
+
+def debug_allowed_hosts(request):
+    return JsonResponse({'ALLOWED_HOSTS': settings.ALLOWED_HOSTS})
 
 @csrf_exempt
 @require_http_methods(["GET", "POST", "OPTIONS"])
@@ -59,7 +64,11 @@ def chat(request):
                 }
 
             
-            if pref_lang == 'ar': shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            if pref_lang == 'ar': 
+                shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            else:
+                shipment_details =  get_shipment_data(rand_mode=True)
+                
             if pref_lang == 'ar':
                 notifications['shipment_status_updates'] = f" حاوية {shipment_details['Container']} قد غادر المنفذ"
                 
@@ -87,9 +96,10 @@ def chat(request):
             message = action_res_dict.get("message", "No message provided")
             
             
-            shipment_details= get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])
+            shipment_details = get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])
             
-            if pref_lang == 'ar': shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            if pref_lang == 'ar': 
+                shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
             
             if ActionAccepted:
                 rerouted_alert = f"Delivery {shipment_details['DeliveryID']} has been rerouted to {response_value['suggested_port']} successfully."

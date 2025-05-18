@@ -171,6 +171,7 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
         kuwait_time_str = datetime.now(pytz.timezone('Asia/Kuwait')).strftime('%Y-%m-%d %H:%M:%S')
         input =  {
             "mode": "Prod",
+            "tone": "No suggestions no approvals abou the shipment specific details",
             "Language": lang,
             "context": "greeting",
             "conditions": {
@@ -200,6 +201,7 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
             "mode": "Prod",
             "Language": lang,
             "context": "action_response",
+            "DateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "suggested_route": details.get("suggested_port"),
             "conditions": shipment_details,
             "user_response": details.get("user_response")
