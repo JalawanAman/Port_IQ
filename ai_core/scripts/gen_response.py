@@ -21,7 +21,7 @@ def generate_response(client, messages, my_function, my_fuc_name, max_tokens=700
     functions = my_function if isinstance(my_function, list) else [my_function]
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        # model="gpt-4",
+        # model="gpt-4-turbo",
         messages=messages,
         functions=functions,
         function_call=my_fuc_name,
@@ -49,7 +49,6 @@ def generate_port_shipment_data(file_path = "./ai_core/outputs/shipment_data.jso
                 'ETA': f"{random.randint(4, 5)}h {random.randint(0, 59)}m",
                 'Status': random.choices(['Delayed', 'Pending'], weights=[0.5, 0.5])[0],
                 'Route': random.choice(ports),
-                'WeatherImpact': random.choices([True, False], weights=[0.3, 0.7])[0],
                 'RerouteOptions': random.sample([p for p in ports if p != port], 2)
             }
             shipments.append(shipment)
@@ -228,29 +227,28 @@ def generate_response_main(input, fuc, fuc_name, api_key_file = "./ai_core/input
     # res_text = res.choices[0].message.content
     fuc_res = json.loads(res.choices[0].message.function_call.arguments)
     # conversation.append({"role": "assistant", "content": res_text})
-    print(f"type: {type(fuc_res)}\n\nres: {fuc_res}")
     return fuc_res
 
 
-if __name__ == "__main__":
-    try:
-        key_file = "ai_core/inputs/gpt_api_key.json"
-        ship_data_file = "ai_core/outputs/shipment_data.json"
+# if __name__ == "__main__":
+#     try:
+#         key_file = "ai_core/inputs/gpt_api_key.json"
+#         ship_data_file = "ai_core/outputs/shipment_data.json"
         
-        input_greet, ship_details, fuc, fuc_name = process_input(details={"mode": "greeting"}, shipment_id=None, shipment_json_data_file=ship_data_file, gen_shipment_data=True)
-        fuc_res = generate_response_main(input_greet, fuc, fuc_name, api_key_file=key_file)
+#         input_greet, ship_details, fuc, fuc_name = process_input(details={"mode": "greeting"}, shipment_id=None, shipment_json_data_file=ship_data_file, gen_shipment_data=True)
+#         fuc_res = generate_response_main(input_greet, fuc, fuc_name, api_key_file=key_file)
         
-        input_thing, ship_details, fuc, fuc_name = process_input(details={"mode": "shipment_suggestion"}, shipment_id=None, shipment_json_data_file=ship_data_file, gen_shipment_data=False)
-        fuc_res = generate_response_main(input_thing, fuc, fuc_name, api_key_file=key_file)
+#         input_thing, ship_details, fuc, fuc_name = process_input(details={"mode": "shipment_suggestion"}, shipment_id=None, shipment_json_data_file=ship_data_file, gen_shipment_data=False)
+#         fuc_res = generate_response_main(input_thing, fuc, fuc_name, api_key_file=key_file)
         
-        input = "yes thats right."
-        input = "how are you buddyt."
-        id = ship_details["DeliveryID"]
-        suggested = fuc_res["port"]
-        # print(id)
-        # print(suggested)
-        input_acc, ship_details, fuc, fuc_name = process_input(details={"mode": "action_response", "user_response": input, "suggested_port": suggested}, shipment_id=id, shipment_json_data_file=ship_data_file, gen_shipment_data=False)
-        fuc_res = generate_response_main(input_acc, fuc, fuc_name, api_key_file=key_file)
+#         input = "yes thats right."
+#         input = "how are you buddyt."
+#         id = ship_details["DeliveryID"]
+#         suggested = fuc_res["port"]
+#         # print(id)
+#         # print(suggested)
+#         input_acc, ship_details, fuc, fuc_name = process_input(details={"mode": "action_response", "user_response": input, "suggested_port": suggested}, shipment_id=id, shipment_json_data_file=ship_data_file, gen_shipment_data=False)
+#         fuc_res = generate_response_main(input_acc, fuc, fuc_name, api_key_file=key_file)
 
-    except Exception as e:
-        raise e
+#     except Exception as e:
+#         raise e

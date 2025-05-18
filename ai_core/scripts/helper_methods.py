@@ -50,6 +50,9 @@ def generate_random_eta( max_eta_str, current_eta_str='0h 35m', min_gap_minutes=
 
 def update_shipment_entry( updated_entry, file_path="./ai_core/outputs/shipment_data.json"):
     try:
+        
+        updated_entry = trans_to_shipment_ar(updated_entry)
+        
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"File not found at {file_path}")
 
@@ -83,23 +86,61 @@ def update_shipment_entry( updated_entry, file_path="./ai_core/outputs/shipment_
     except Exception as e:
         print(f"Error updating shipment entry: {e}")
         return False
-    
+
+
+
+
+def get_translation(value: str, target_lang: str) -> str:
+
+    translations = {
+        # English to Arabic
+        'Shuwaikh Port': 'ميناء شويخ',
+        'Shuaiba Port': 'ميناء شويبا',
+        'Doha Port': 'ميناء الدوحة',
+        'Delayed': 'تأخير',
+        'In Progress': 'في تَقَدم',
+        'Pending': 'قيد الانتظار',
+        
+        # Arabic to English
+        'ميناء شويخ': 'Shuwaikh Port',
+        'ميناء شويبا': 'Shuaiba Port',
+        'ميناء الدوحة': 'Doha Port',
+        'تأخير': 'Delayed',
+        'في تَقَدم': 'In Progress',
+        'قيد الانتظار': 'Pending',
+    }
+
+    # Simple function to check if a string is Arabic
+    def is_arabic(text):
+        return any('\u0600' <= char <= '\u06FF' for char in text)
+
+    if target_lang == 'ar':
+        if is_arabic(value):
+            return value  # Already Arabic, return as is
+        return translations.get(value, value)
+    elif target_lang == 'en':
+        if not is_arabic(value):
+            return value  # Already English, return as is
+        return translations.get(value, value)
+    else:
+        return f"Error: Unsupported language '{target_lang}'"
+
+
 def to_ar(given, prefferd_lang='ar'):
     
     source = 'en'
     if prefferd_lang == 'en':
         source = 'ar'
-        
     translated = GoogleTranslator(source=source, target=prefferd_lang).translate(given)
     return translated
     
-def trans_to_shipment_ar(shipment_details, prefferd_lang='ar'):
+def trans_to_shipment_ar(shipment_details, tar_lang):
     
     try:
         
-        shipment_details['Port'] = to_ar(shipment_details['Port'], prefferd_lang)
-        shipment_details['Status'] = to_ar(shipment_details['Status'], prefferd_lang)
-        shipment_details['Route'] = to_ar(shipment_details['Route'], prefferd_lang)
+        shipment_details['Port'] = get_translation(shipment_details['Port'], tar_lang)
+        shipment_details['Status'] = get_translation(shipment_details['Status'], tar_lang)
+        shipment_details['Route'] = get_translation(shipment_details['Route'], tar_lang)
         
         return shipment_details
     except Exception as e:

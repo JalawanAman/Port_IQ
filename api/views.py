@@ -53,17 +53,15 @@ def chat(request):
             if not shipment_details:
                print("[Eror] Shipment details are empty!")
             
-            print("input_gred: ", input_gred)
-            print("input_shipment: ", input_shipment)
             
             notifications = {
                 "shipment_status_updates": f"Container {shipment_details['Container']} has left port.",
                 }
 
             
+            if pref_lang == 'ar': shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
             if pref_lang == 'ar':
-                shipment_details = trans_to_shipment_ar(shipment_details)
-                notifications['shipment_status_updates'] = to_ar(notifications['shipment_status_updates'])
+                notifications['shipment_status_updates'] = f" حاوية {shipment_details['Container']} قد غادر المنفذ"
                 
             
             
@@ -88,9 +86,11 @@ def chat(request):
             status = action_res_dict.get("Status", "Pending")
             message = action_res_dict.get("message", "No message provided")
             
-            shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
             
-            print(ActionAccepted, status)
+            shipment_details= get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])
+            
+            if pref_lang == 'ar': shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            
             if ActionAccepted:
                 rerouted_alert = f"Delivery {shipment_details['DeliveryID']} has been rerouted to {response_value['suggested_port']} successfully."
                 
@@ -107,7 +107,7 @@ def chat(request):
                 }
             
             if pref_lang == 'ar':
-                notifications['shipment_status_updates'] = to_ar(notifications['shipment_status_updates'])
+                notifications['shipment_status_updates'] = f" حاوية {shipment_details['Container']} قد غادر المنفذ"
                 if rerouted_alert:
                     notifications['rerouted_alert'] = to_ar(rerouted_alert)
             
@@ -119,6 +119,8 @@ def chat(request):
                 
             else:
                 shipment_details= get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])
+                print(shipment_details)
+                if pref_lang == 'ar': shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
             
             result = {
                 "ActionAccepted": ActionAccepted,
@@ -129,7 +131,7 @@ def chat(request):
             }
 
             update_shipment_entry(shipment_details)
-            print("\n\n[Response Generated] 2nd:", result)
+            print("\n\n[Generated Response] 2nd:", result)
             
         # Final response with CORS headers
         final_response = JsonResponse({'result': result}, status=200)

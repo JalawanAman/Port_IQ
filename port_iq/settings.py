@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-c(&1e4a)mj4p*p553hs(e=)^el2x3xm*#a9$=dyr*qdgni+pi-
 DEBUG = True
 
 # ALLOWED_HOSTS = ['192.168.1.5', 'localhost', '127.0.0.1']
-ALLOWED_HOSTS = ['16.171.1.191', 'localhost', '127.0.0.1'] # AWS ip in use
+ALLOWED_HOSTS = ['portiq.croncore.com', 'localhost', '127.0.0.1', '16.171.1.191']
+
 
 
 

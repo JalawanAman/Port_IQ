@@ -2,7 +2,7 @@ from ai_core.scripts.helper_methods import flatten_input_dict
 import json
 
 system_role = (
-    "You are **Port_IQ Agent**, an advanced, context-aware, and outcome-driven virtual assistant specializing in port management and shipment optimization. "
+    "You are **Port IQ Agent**, an advanced, context-aware, and outcome-driven virtual assistant specializing in port management and shipment optimization. "
     "Your core mission is to streamline operations by analyzing shipment data, offering assertive and well-informed recommendations, and driving swift user decisions with maximum efficiency. "
 
     "Language Handling: "
@@ -110,11 +110,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-001",
                 "Port": "Doha Port",
-                "Container": "CONT-684665",
                 "ETA": "3h 47m",
                 "Status": "Pending",
                 "Route": "Doha Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuwaikh Port", "Shuaiba Port"]
             }
         },
@@ -135,11 +133,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-138",
                 "Port": "Shuwaikh Port",
-                "Container": "CONT-415057",
                 "ETA": "4h 0m",
                 "Status": "Pending",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Doha Port", "Shuaiba Port"]
             }
         },
@@ -159,11 +155,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-139",
                 "Port": "Doha Port",
-                "Container": "CONT-247501",
                 "ETA": "1h 35m",
                 "Status": "Delayed",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuaiba Port", "Shuwaikh Port"]
             }
         },
@@ -184,11 +178,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-140",
                 "Port": "Shuaiba Port",
-                "Container": "CONT-707327",
                 "ETA": "3h 58m",
                 "Status": "Delayed",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuwaikh Port", "Doha Port"]
             }
         },
@@ -211,11 +203,36 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-001",
                 "Port": "Doha Port",
-                "Container": "CONT-684665",
                 "ETA": "3h 47m",
-                "Status": "At Port",
+                "Status": "Pending",
                 "Route": "Doha Port",
-                "WeatherImpact": False,
+                "RerouteOptions": ["Shuwaikh Port", "Shuaiba Port"]
+            },
+            "user_response": "Thank you!"
+        },
+        "response": {
+            "mode": "Train",
+            "Language": "en",
+            "ActionAccepted": True,
+            "Status": "Completed",
+            "message": (
+                "You’re most welcome!. "
+                "Enjoy your weekend and the peace of mind knowing your app is running solid!"
+            )
+        }
+    },
+    {
+        "input": {
+            "mode": "Train",
+            "Language": "en",
+            "context": "action_response",
+            "suggested_route": "Shuwaikh Port",
+            "conditions": {
+                "DeliveryID": "DEL-2025-001",
+                "Port": "Doha Port",
+                "ETA": "3h 47m",
+                "Status": "Pending",
+                "Route": "Doha Port",
                 "RerouteOptions": ["Shuwaikh Port", "Shuaiba Port"]
             },
             "user_response": "Yes, that would be great. Please proceed."
@@ -239,11 +256,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-146",
                 "Port": "Shuaiba Port",
-                "Container": "CONT-709309",
                 "ETA": "4h 27m",
-                "Status": "Completed",
+                "Status": "Delayed",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuwaikh Port", "Doha Port"]
             },
             "user_response": "Tell me about yourself."
@@ -262,15 +277,14 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
+            "suggested_route": "Shuwaikh Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-145",
                 "Port": "Doha Port",
-                "Container": "CONT-708327",
                 "ETA": "1h 1m",
-                "Status": "At Port",
+                "Status": "Delayed",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": True,
-                "RerouteOptions": ["Shuwaikh Port", "Shuaiba Port"]
+                "RerouteOptions": ["Shuwaikh Port", "Doha Port"]
             },
             "user_response": "Why do cats purr?"
         },
@@ -288,14 +302,13 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
+            "suggested_route": "Doha Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-148",
                 "Port": "Shuwaikh Port",
-                "Container": "CONT-214707",
                 "ETA": "3h 27m",
                 "Status": "Delayed",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Doha Port", "Shuaiba Port"]
             },
             "user_response": "Tell me a fun fact!"
@@ -314,21 +327,20 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
+            "suggested_route": "Doha Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-147",
                 "Port": "Doha Port",
-                "Container": "CONT-255213",
                 "ETA": "2h 43m",
-                "Status": "Completed",
+                "Status": "Pending",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": True,
                 "RerouteOptions": ["Shuwaikh Port", "Shuaiba Port"]
             },
             "user_response": "Are you a real person?"
         },
         "response": {
             "ActionAccepted": False,
-            "Status": "Pending",
+            "Status": "Completed",
             "message": (
                 "Not quite! I’m a dedicated AI agent built to assist with your port management processes and shipment decisions. "
                 "By the way, Shipment DEL-2025-147 is still pending reroute. Should I handle it now?"
@@ -345,11 +357,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-136",
                 "Port": "Shuaiba Port",
-                "Container": "CONT-967880",
                 "ETA": "3h 18m",
-                "Status": "Completed",
+                "Status": "Pending",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Doha Port", "Shuwaikh Port"]
             },
             "user_response": "Yes, reroute it now. Let’s save that time."
@@ -374,11 +384,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-011",
                 "Port": "Shuwaikh Port",
-                "Container": "CONT-683665",
                 "ETA": "3h 47m",
-                "Status": "At Port",
+                "Status": "Delayed",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuwaikh Port", "Shuaiba Port"]
             },
             "user_response": "Yes, that would be great. Please proceed."
@@ -403,11 +411,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-134",
                 "Port": "Doha Port",
-                "Container": "CONT-683665",
                 "ETA": "3h 47m",
-                "Status": "At Port",
+                "Status": "Pending",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuwaikh Port", "Doha Port"]
             },
             "user_response": "Yes, that would be great. Please proceed."
@@ -427,15 +433,14 @@ predefined_messages = [
         "input": {
             "mode": "Train",
             "Language": "en",
+            "suggested_route": "Shuwaikh Port",
             "context": "action_response",
             "conditions": {
                 "DeliveryID": "DEL-2025-147",
                 "Port": "Doha Port",
-                "Container": "CONT-255213",
                 "ETA": "2h 43m",
-                "Status": "Completed",
+                "Status": "Delayed",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": True,
                 "RerouteOptions": ["Shuwaikh Port", "Shuaiba Port"]
             },
             "user_response": "How does a plane stay in the air?"
@@ -458,11 +463,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-005",
                 "Port": "Shuwaikh Port",
-                "Container": "CONT-271509",
                 "ETA": "5h 22m",
-                "Status": "Completed",
+                "Status": "Delayed",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": True,
                 "RerouteOptions": ["Shuaiba Port", "Doha Port"]
             },
             "user_response": "No, Do not do it."
@@ -481,14 +484,13 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
+            "suggested_route": "Shuwaikh Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-145",
                 "Port": "Doha Port",
-                "Container": "CONT-708327",
                 "ETA": "1h 1m",
-                "Status": "At Port",
+                "Status": "Delayed",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": True,
                 "RerouteOptions": ["Shuwaikh Port", "Shuaiba Port"]
             },
             "user_response": "Who created you?"
@@ -508,14 +510,13 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
+            "suggested_route": "Doha Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-005",
                 "Port": "Shuwaikh Port",
-                "Container": "CONT-271509",
                 "ETA": "5h 22m",
-                "Status": "Completed",
+                "Status": "Delayed",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": True,
                 "RerouteOptions": ["Shuaiba Port", "Doha Port"]
             },
             "user_response": "No, I have some other plans. Thank you."
@@ -539,11 +540,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-137",
                 "Port": "Doha Port",
-                "Container": "CONT-484029",
                 "ETA": "5h 53m",
-                "Status": "Completed",
+                "Status": "Pending",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": True,
                 "RerouteOptions": ["Doha Port", "Shuwaikh Port"]
             },
             "user_response": "Go ahead and proceed with the new route."
@@ -564,14 +563,13 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
+            "suggested_route": "Doha Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-005",
                 "Port": "Shuwaikh Port",
-                "Container": "CONT-271509",
                 "ETA": "5h 22m",
-                "Status": "Completed",
+                "Status": "Pending",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": True,
                 "RerouteOptions": ["Shuaiba Port", "Doha Port"]
             },
             "user_response": "Not at all leave it as is."
@@ -590,15 +588,13 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
-            "suggested_route": "Shuwaikh Port",
+            "suggested_route": "Shuaiba Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-139",
                 "Port": "Doha Port",
-                "Container": "CONT-247501",
                 "ETA": "1h 35m",
                 "Status": "Delayed",
                 "Route": "Shuaiba Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuaiba Port", "Shuwaikh Port"]
             },
             "user_response": "Alright, switch it to the faster port option."
@@ -609,8 +605,8 @@ predefined_messages = [
             "ActionAccepted": True,
             "Status": "Completed",
             "message": (
-                "Reroute confirmed! Shipment DEL-2025-139 will now head to Shuwaikh Port. "
-                "Expect a faster delivery by approximately 2 hours 53 minutes. Shall we review the rest of your shipments?"
+                "Shipment DEL-2025-139 is currently on its best route i suggest let it be on the route Shuaiba Port for a faster delivery. "
+                "Shall we review the rest of your shipments?"
             )
         }
     },
@@ -623,11 +619,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-140",
                 "Port": "Shuaiba Port",
-                "Container": "CONT-707327",
                 "ETA": "3h 58m",
                 "Status": "Delayed",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuwaikh Port", "Doha Port"]
             },
             "user_response": "Please proceed with the rerouting immediately."
@@ -648,14 +642,13 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
+            "suggested_route": "Doha Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-146",
                 "Port": "Shuaiba Port",
-                "Container": "CONT-709309",
                 "ETA": "4h 27m",
-                "Status": "Completed",
+                "Status": "Pending",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuwaikh Port", "Doha Port"]
             },
             "user_response": "Why is the sky blue?"
@@ -674,14 +667,13 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
+            "suggested_route": "Shuaiba Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-144",
                 "Port": "Doha Port",
-                "Container": "CONT-577649",
                 "ETA": "3h 21m",
-                "Status": "Completed",
+                "Status": "Delayed",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuaiba Port", "Shuwaikh Port"]
             },
             "user_response": "Not needed at the moment, thanks."
@@ -704,14 +696,12 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-154",
                 "Port": "Doha Port",
-                "Container": "CONT-571949",
                 "ETA": "3h 21m",
-                "Status": "Completed",
+                "Status": "Delayed",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuaiba Port", "Shuwaikh Port"]
             },
-            "user_response": "Good thats lets do it."
+            "user_response": "Good lets do it."
         },
         "response": {
             "ActionAccepted": True,
@@ -731,11 +721,9 @@ predefined_messages = [
             "conditions": {
                 "DeliveryID": "DEL-2025-154",
                 "Port": " Shuwaikh Port",
-                "Container": "CONT-571949",
                 "ETA": "3h 21m",
-                "Status": "Completed",
+                "Status": "Delayed",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuaiba Port", "Doha Port"]
             },
             "user_response": "Yep."
@@ -754,14 +742,13 @@ predefined_messages = [
             "mode": "Train",
             "Language": "en",
             "context": "action_response",
+            "suggested_route": "Shuaiba Port",
             "conditions": {
                 "DeliveryID": "DEL-2025-194",
                 "Port": " Shuwaikh Port",
-                "Container": "CONT-597949",
                 "ETA": "3h 21m",
-                "Status": "Completed",
+                "Status": "Pending",
                 "Route": "Shuwaikh Port",
-                "WeatherImpact": False,
                 "RerouteOptions": ["Shuaiba Port", "Doha Port"]
             },
             "user_response": "Hey i wondered why do breath air."
