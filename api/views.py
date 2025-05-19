@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 import json
 
 from ai_core.scripts.gen_response import generate_response_main, process_input, get_shipment_data
-from ai_core.scripts.helper_methods import  generate_random_eta, update_shipment_entry, trans_to_shipment_ar, to_ar
+from ai_core.scripts.helper_methods import  generate_random_eta, update_shipment_entry, trans_to_shipment_ar, to_ar, get_translation
 from django.conf import settings
 from django.http import JsonResponse
 
@@ -67,7 +67,7 @@ def chat(request):
             if pref_lang == 'ar': 
                 shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
             else:
-                shipment_details =  get_shipment_data(rand_mode=True)
+                shipment_details =  get_shipment_data(rand_mode=False, shipment_id=shipment_id)
                 
             if pref_lang == 'ar':
                 notifications['shipment_status_updates'] = f" حاوية {shipment_details['Container']} قد غادر المنفذ"
@@ -96,10 +96,20 @@ def chat(request):
             message = action_res_dict.get("message", "No message provided")
             
             
-            shipment_details = get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])
+            if not response_value['suggested_port']:
+                response_value['suggested_port'] = "Doha Port"
+                if pref_lang: response_value['suggested_port'] = "ميناء الدوحة"
             
+            
+            
+
             if pref_lang == 'ar': 
                 shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            else:
+                shipment_details = get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])
+            
+            
+            
             
             if ActionAccepted:
                 rerouted_alert = f"Delivery {shipment_details['DeliveryID']} has been rerouted to {response_value['suggested_port']} successfully."
@@ -121,16 +131,26 @@ def chat(request):
                 if rerouted_alert:
                     notifications['rerouted_alert'] = to_ar(rerouted_alert)
             
+
             updated_eta = generate_random_eta(shipment_details['ETA'])
             if ActionAccepted:
+                # shipment_details['Route'] = get_translation(response_value['suggested_port'], pref_lang)
+                print(response_value['suggested_port'])
                 shipment_details['Route'] = response_value['suggested_port']
                 shipment_details['ETA'] = updated_eta
                 shipment_details['Status'] = 'في تَقَدم' if pref_lang == 'ar' else 'In Progress'
-                
+                print("SHIP: ", shipment_details)
             else:
                 shipment_details= get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])
-                print(shipment_details)
                 if pref_lang == 'ar': shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            
+            
+            # if pref_lang == 'ar': 
+            #     shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            # else:
+            shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            
+            
             
             result = {
                 "ActionAccepted": ActionAccepted,

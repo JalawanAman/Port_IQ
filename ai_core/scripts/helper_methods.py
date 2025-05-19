@@ -95,7 +95,7 @@ def get_translation(value: str, target_lang: str) -> str:
     translations = {
         # English to Arabic
         'Shuwaikh Port': 'ميناء شويخ',
-        'Shuaiba Port': 'ميناء شويبا',
+        'Shuaiba Port': 'ميناء شعيبة ',
         'Doha Port': 'ميناء الدوحة',
         'Delayed': 'تأخير',
         'In Progress': 'في تَقَدم',
@@ -103,7 +103,7 @@ def get_translation(value: str, target_lang: str) -> str:
         
         # Arabic to English
         'ميناء شويخ': 'Shuwaikh Port',
-        'ميناء شويبا': 'Shuaiba Port',
+        'ميناء شعيبة ':'Shuaiba Port',
         'ميناء الدوحة': 'Doha Port',
         'تأخير': 'Delayed',
         'في تَقَدم': 'In Progress',
@@ -138,9 +138,15 @@ def trans_to_shipment_ar(shipment_details, tar_lang):
     
     try:
         
-        shipment_details['Port'] = get_translation(shipment_details['Port'], tar_lang)
-        shipment_details['Status'] = get_translation(shipment_details['Status'], tar_lang)
-        shipment_details['Route'] = get_translation(shipment_details['Route'], tar_lang)
+        # shipment_details['Port'] = get_translation(shipment_details['Port'], tar_lang)
+        # shipment_details['Status'] = get_translation(shipment_details['Status'], tar_lang)
+        # print(shipment_details['Route']," : ",get_translation(shipment_details['Route'], tar_lang))
+        # shipment_details['Route'] = get_translation(shipment_details['Route'], tar_lang)
+        
+        shipment_details['Port'] = to_ar(shipment_details['Port'], tar_lang)
+        shipment_details['Status'] = to_ar(shipment_details['Status'], tar_lang)
+        print(shipment_details['Route']," : ",to_ar(shipment_details['Route'], tar_lang))
+        shipment_details['Route'] = to_ar(shipment_details['Route'], tar_lang)
         
         return shipment_details
     except Exception as e:
