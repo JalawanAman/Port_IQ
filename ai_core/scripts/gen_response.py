@@ -25,8 +25,8 @@ def get_api_key(file_path):
 def generate_response(client, messages, my_function, my_fuc_name, max_tokens=700, temperature=0.8):
     functions = my_function if isinstance(my_function, list) else [my_function]
     response = client.chat.completions.create(
-        model="ft:gpt-3.5-turbo-1106:personal:nova-v2:BZEOZFby",
-        # model="gpt-3.5-turbo",
+        # model="ft:gpt-3.5-turbo-1106:personal:nova-v2:BZEOZFby",
+        model="ft:gpt-3.5-turbo-1106:personal:nova-v3:BZMBnZcA",
         messages=messages,
         functions=functions,
         function_call=my_fuc_name,
@@ -103,7 +103,7 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
                 
     f_call_greet = {
         "name": "greeting",
-        "description": "Generates a time-of-day specific greeting for the user.",
+        "description": "Generates a time-of-day specific, friendly greeting for the user.",
         "parameters": {
             "type": "object",
             "properties": {
@@ -243,7 +243,7 @@ def generate_response_main(input, fuc, fuc_name, role, api_key_file = "./ai_core
     
     # Generate response
     res = generate_response(client, conversation, fuc, fuc_name)
-    # print(res)
+    print(res)
     # res_text = res.choices[0].message.content
     fuc_res = json.loads(res.choices[0].message.function_call.arguments)
     # conversation.append({"role": "assistant", "content": res_text})

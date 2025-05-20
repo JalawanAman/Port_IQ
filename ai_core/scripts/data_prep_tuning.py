@@ -14,12 +14,17 @@ greet_sys_role = (
     "Do NOT infer language from the message text — trust the Language key fully and respond in that language. "
     "The tone must always be natural, sincere, and respectful — never robotic. Match tone consistency across both English and Arabic. "
 
-    "Example `en`: Good afternoon! Hope your day’s going well. Let’s ease back into today’s tasks when you’re ready. "
-    "Example `ar`: مساء الخير! أتمنى أن يومك كان مليئًا بالإنجازات. لنعد بلطف إلى المهام متى ما أحببت. "
+    "💡 IMPORTANT: Your response MUST be a **JSON object** with ONLY the following format:\n"
+    "{\"message\": \"your generated greeting here\"}\n"
+    "Do NOT include anything outside this object. Do NOT prefix with 'message:' or any role or explanation. "
 
-    "Add warm, motivational comments if suitable {e.g., `A perfect moment to keep things moving!`}. "
+    "Example `en`: {\"message\": \"Good afternoon! Hope your day’s going well. Let’s ease back into today’s tasks when you’re ready.\"} "
+    "Example `ar`: {\"message\": \"مساء الخير! أتمنى أن يومك كان مليئًا بالإنجازات. لنعد بلطف إلى المهام متى ما أحببت.\"} "
+
+    "Add warm, motivational comments if suitable {e.g., 'A perfect moment to keep things moving!'} "
     "Avoid asking questions, permissions, or making decisions. Keep it positive and welcoming."
 )
+
 
 
 
@@ -29,7 +34,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 09:00"},
-        {"role": "assistant", "content": "response: Good morning! Wishing you a fresh and focused start. Let’s set the pace for a smooth and productive day!"}
+        {"role": "assistant", "content": "'message': 'Good morning! Wishing you a fresh and focused start. Let’s set the pace for a smooth and productive day!'"}
     ]
 },
 
@@ -37,7 +42,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 09:00"},
-        {"role": "assistant", "content": "response: صباح الخير! بداية مشرقة ويوم مليء بالفرص أمامك. دعنا نبدأ خطواتنا نحو يوم ناجح!"}
+        {"role": "assistant", "content": "'message': 'صباح الخير! بداية مشرقة ويوم مليء بالفرص أمامك. دعنا نبدأ خطواتنا نحو يوم ناجح!'"}
     ]
 },
 
@@ -45,7 +50,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 14:00"},
-        {"role": "assistant", "content": "response: مساء الخير! أتمنى أن يكون يومك مثمرًا حتى الآن. حان الوقت لإعطاء دفعة أخيرة لشحناتنا!"}
+        {"role": "assistant", "content": "'message': 'مساء الخير! أتمنى أن يكون يومك مثمرًا حتى الآن. حان الوقت لإعطاء دفعة أخيرة لشحناتنا!'"}
     ]
 },
 
@@ -53,7 +58,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 19:00"},
-        {"role": "assistant", "content": "response: Good evening! Hope your day’s been rewarding. Let’s wrap things up on a high note and tidy up those shipments!"}
+        {"role": "assistant", "content": "'message': 'Good evening! Hope your day’s been rewarding. Let’s wrap things up on a high note and tidy up those shipments!'"}
     ]
 },
 
@@ -61,7 +66,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 19:00"},
-        {"role": "assistant", "content": "response: مساء الخير! أتمنى أن يومك كان مليئًا بالإنجازات. لنختم اليوم بإنجاز أخير ونرتب أمور الشحن!"}
+        {"role": "assistant", "content": "'message': 'مساء الخير! أتمنى أن يومك كان مليئًا بالإنجازات. لنختم اليوم بإنجاز أخير ونرتب أمور الشحن!'"}
     ]
 },
 
@@ -69,7 +74,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 08:00"},
-        {"role": "assistant", "content": "response: Good morning! The day’s just beginning, and it’s already full of opportunities. Let’s kickstart those shipments and set the tone for success!"}
+        {"role": "assistant", "content": "'message': 'Good morning! The day’s just beginning, and it’s already full of opportunities. Let’s kickstart those shipments and set the tone for success!'"}
     ]
 },
 
@@ -77,7 +82,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 08:00"},
-        {"role": "assistant", "content": "response: صباح الخير! بداية يوم جديد مليء بالفرص بانتظارك. لنبدأ العمل ونُنجز أولى المهام بنجاح!"}
+        {"role": "assistant", "content": "'message': 'صباح الخير! بداية يوم جديد مليء بالفرص بانتظارك. لنبدأ العمل ونُنجز أولى المهام بنجاح!'"}
     ]
 },
 
@@ -85,7 +90,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 13:00"},
-        {"role": "assistant", "content": "response: Good afternoon! Energy’s still high—perfect time to push through and streamline those pending shipments!"}
+        {"role": "assistant", "content": "'message': 'Good afternoon! Energy’s still high—perfect time to push through and streamline those pending shipments!'"}
     ]
 },
 
@@ -93,7 +98,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 13:00"},
-        {"role": "assistant", "content": "response: مساء الخير! ما زال اليوم في أوجه، فرصة رائعة لإنهاء المهام المتبقية بكل نشاط!"}
+        {"role": "assistant", "content": "'message': 'مساء الخير! ما زال اليوم في أوجه، فرصة رائعة لإنهاء المهام المتبقية بكل نشاط!'"}
     ]
 },
 
@@ -101,7 +106,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 18:30"},
-        {"role": "assistant", "content": "response: Good evening! The day’s winding down, but there’s just enough time to put the final touches on those shipments. Let’s finish strong!"}
+        {"role": "assistant", "content": "'message': 'Good evening! The day’s winding down, but there’s just enough time to put the final touches on those shipments. Let’s finish strong!'"}
     ]
 },
 
@@ -109,7 +114,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 18:30"},
-        {"role": "assistant", "content": "response: مساء الخير! اليوم يشارف على نهايته، وما زالت لدينا فرصة لإتمام آخر الإنجازات بنجاح!"}
+        {"role": "assistant", "content": "'message': 'مساء الخير! اليوم يشارف على نهايته، وما زالت لدينا فرصة لإتمام آخر الإنجازات بنجاح!'"}
     ]
 },
 
@@ -117,7 +122,7 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 16:00"},
-        {"role": "assistant", "content": "response: Afternoon vibes are strong! Let’s give those shipments a little nudge and keep things rolling smoothly!"}
+        {"role": "assistant", "content": "'message': 'Afternoon vibes are strong! Let’s give those shipments a little nudge and keep things rolling smoothly!'"}
     ]
 },
 
@@ -125,13 +130,96 @@ greet_data = [
     "messages": [
         {"role": "system", "content": greet_sys_role},
         {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 16:00"},
-        {"role": "assistant", "content": "response: مساء النشاط! دعنا نعطي الشحنات دفعة بسيطة ونكمل اليوم بأفضل شكل!"}
+        {"role": "assistant", "content": "'message': 'مساء النشاط! دعنا نعطي الشحنات دفعة بسيطة ونكمل اليوم بأفضل شكل!'"}
     ]
 },
 
 
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 07:00"},
+            {"role": "assistant", "content": "{'message': 'Good morning! The sun’s just rising — a perfect time to take on the day with clarity and calm. Let’s move into it gently!'}"}
+        ]
+    },
+
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 07:00"},
+            {"role": "assistant", "content": "{'message': 'صباح النور! بداية هادئة ويوم جديد أمامنا. فرصة رائعة للانطلاق بخطى واثقة!'}"}
+        ]
+    },
+
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 12:00"},
+            {"role": "assistant", "content": "{'message': 'Good afternoon! You’re right in the heart of the day — a great moment to keep momentum going strong!'}"}
+        ]
+    },
+
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 12:00"},
+            {"role": "assistant", "content": "{'message': 'ظهر الخير! نحن في منتصف اليوم — توقيت مثالي لمواصلة التقدم بكل حيوية!'}"}
+        ]
+    },
+
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 21:00"},
+            {"role": "assistant", "content": "{'message': 'Good night! The day’s nearly done — a moment to feel proud and prepare for a restful close. Nice and steady till the end!'}"}
+        ]
+    },
+
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 21:00"},
+            {"role": "assistant", "content": "{'message': 'مساء الخير! أوشكت الرحلة اليومية على الانتهاء — لحظة للهدوء والرضا. يوم جميل يُختتم بهدوء!'}"}
+        ]
+    },
+
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 11:00"},
+            {"role": "assistant", "content": "{'message': 'Almost midday! You’ve set a strong pace — a wonderful time to keep flowing with confidence.'}"}
+        ]
+    },
+
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 11:00"},
+            {"role": "assistant", "content": "{'message': 'اقتربنا من منتصف النهار! إيقاعك رائع — وقت مثالي لمواصلة العمل بكل ثقة!'}"}
+        ]
+    },
+
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: en, time_of_day: 2025-05-19 22:30"},
+            {"role": "assistant", "content": "{'message': 'Late evening already! A peaceful close is just ahead — feel good about today’s progress and settle in with ease.'}"}
+        ]
+    },
+
+    {
+        "messages": [
+            {"role": "system", "content": greet_sys_role},
+            {"role": "user", "content": "context: greeting, Language: ar, time_of_day: 2025-05-19 22:30"},
+            {"role": "assistant", "content": "{'message': 'مساء متأخر! نهاية اليوم تقترب — استمتع بالهدوء وتقدير كل ما أنجزته اليوم.'}"}
+        ]
+    }
+
 
 ]
+
+
+
 
 
 
@@ -1175,3 +1263,33 @@ def prepare_and_save_data(greet_data, sugg_data, action_data, output_file="ai_co
 # Optional guard to avoid running when imported
 if __name__ == "__main__":
     prepare_and_save_data(greet_data, sugg_data, action_data, output_file="ai_core/outputs/final_dataset_v1.jsonl")
+    
+    
+        
+    # output_path = 'ai_core/outputs/greet_data.jsonl'
+
+    # with open(output_path, 'w', encoding='utf-8') as f:
+    #     for sample in greet_data:
+    #         # Inject the correct system role
+    #         for message in sample["messages"]:
+    #             if message["role"] == "system":
+    #                 message["content"] = greet_sys_role
+    #             elif message["role"] == "assistant":
+    #                 raw = message["content"]
+                    
+    #                 # Fix improperly formatted assistant content
+    #                 if raw.startswith("{'message':"):
+    #                     # Replace single quotes with double quotes
+    #                     try:
+    #                         parsed = eval(raw)  # convert to dict
+    #                         message["content"] = json.dumps(parsed, ensure_ascii=False)
+    #                     except:
+    #                         continue  # Skip or log if error
+    #                 elif raw.startswith("'message':"):
+    #                     # Remove prefix and rewrap
+    #                     value = raw.replace("'message':", "").strip().strip("'").strip()
+    #                     message["content"] = json.dumps({"message": value}, ensure_ascii=False)
+            
+    #         # Write cleaned sample to file
+    #         json.dump(sample, f, ensure_ascii=False)
+    #         f.write('\n')
