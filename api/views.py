@@ -52,8 +52,8 @@ def chat(request):
         # Business logic based on 'user_input'
         if isinstance(response_value, dict) and response_value['user_input'] == False:
             # Process greeting and shipment suggestions
-            input_gred, shipment_details, fuc, fuc_name = process_input(details={"mode": "greeting", "Language": pref_lang}, shipment_id=shipment_id)
-            input_shipment, shipment_details, fuc, fuc_name = process_input(details={"mode": "shipment_suggestion",  "Language": pref_lang}, shipment_id=shipment_id, gen_shipment_data=True)
+            input_gred, shipment_details, fuc, fuc_name, greet_role = process_input(details={"mode": "greeting", "Language": pref_lang}, shipment_id=shipment_id)
+            input_shipment, shipment_details, fuc, fuc_name, sugg_role = process_input(details={"mode": "shipment_suggestion",  "Language": pref_lang}, shipment_id=shipment_id, gen_shipment_data=True)
             
             if not shipment_details:
                print("[Eror] Shipment details are empty!")
@@ -74,8 +74,8 @@ def chat(request):
                 
             
             
-            greet_res = generate_response_main(input_gred, fuc, fuc_name)['message']
-            suggestion_res = generate_response_main(input_shipment, fuc, fuc_name)
+            greet_res = generate_response_main(input_gred, fuc, fuc_name, greet_role)['message']
+            suggestion_res = generate_response_main(input_shipment, fuc, fuc_name, sugg_role)
             
             result = {
                 "delivery_details": shipment_details,
@@ -88,8 +88,8 @@ def chat(request):
         if isinstance(response_value, dict) and isinstance(response_value['user_input'], str):
             # Direct response based on user input
             # direct_response = generate_response_main(response_value)
-            input_action, shipment_details, fuc, fuc_name = process_input(details={"mode": "action_response", "Language": pref_lang, "user_response": response_value['user_input'], "suggested_port": response_value['suggested_port']}, shipment_id= shipment_id )
-            action_res_dict = generate_response_main(input_action, fuc, fuc_name)
+            input_action, shipment_details, fuc, fuc_name, action_role = process_input(details={"mode": "action_response", "Language": pref_lang, "user_response": response_value['user_input'], "suggested_port": response_value['suggested_port']}, shipment_id= shipment_id )
+            action_res_dict = generate_response_main(input_action, fuc, fuc_name, action_role)
             
             ActionAccepted = action_res_dict.get("ActionAccepted", False)
             status = action_res_dict.get("Status", "Pending")
@@ -160,7 +160,7 @@ def chat(request):
                 "notifications": notifications,
             }
 
-            update_shipment_entry(shipment_details)
+            update_shipment_entry(shipment_details, 'en')
             print("\n\n[Generated Response] 2nd:", result)
             
         # Final response with CORS headers

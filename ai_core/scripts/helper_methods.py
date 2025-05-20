@@ -48,10 +48,10 @@ def generate_random_eta( max_eta_str, current_eta_str='0h 35m', min_gap_minutes=
         print(f"Error generating random ETA: {e}")
         return current_eta_str  # Fallback to current ETA if an error occurs
 
-def update_shipment_entry( updated_entry, file_path="./ai_core/outputs/shipment_data.json"):
+def update_shipment_entry( updated_entry, tar_lang,  file_path="./ai_core/outputs/shipment_data.json"):
     try:
         
-        updated_entry = trans_to_shipment_ar(updated_entry)
+        updated_entry = trans_to_shipment_ar(updated_entry, tar_lang)
         
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"File not found at {file_path}")
