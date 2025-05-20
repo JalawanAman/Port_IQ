@@ -1,9 +1,28 @@
-# Ignore the inputs and outputs directories
+# Ignore input/output API secrets or data
 ai_core/inputs/gpt_api_key.json
 
+# Ignore Python bytecode and cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
 
-# Ignore the virtual environment
+# Ignore virtual environments
 venv/
 
 # Ignore environment variable files
 .env
+
+# Ignore logs and temp system files
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# Ignore compiled/migrated files and DBs
+*.sqlite3
+db.sqlite3
+
+# Ignore Jupyter/IPython notebook checkpoints if used
+.ipynb_checkpoints/

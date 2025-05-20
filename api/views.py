@@ -52,8 +52,11 @@ def chat(request):
         # Business logic based on 'user_input'
         if isinstance(response_value, dict) and response_value['user_input'] == False:
             # Process greeting and shipment suggestions
-            input_gred, shipment_details, fuc, fuc_name, greet_role = process_input(details={"mode": "greeting", "Language": pref_lang}, shipment_id=shipment_id)
-            input_shipment, shipment_details, fuc, fuc_name, sugg_role = process_input(details={"mode": "shipment_suggestion",  "Language": pref_lang}, shipment_id=shipment_id, gen_shipment_data=True)
+            input_gred, shipment_details, fuc_greet, fuc_name_greet, greet_role = process_input(details={"mode": "greeting", "Language": pref_lang}, shipment_id=shipment_id)
+            input_shipment, shipment_details, fuc_sugg, fuc_name_sugg, sugg_role = process_input(details={"mode": "shipment_suggestion",  "Language": pref_lang}, shipment_id=shipment_id, gen_shipment_data=True)
+            
+            print("greet_input: ", input_gred)
+            print("input_shipment: ", input_shipment)
             
             if not shipment_details:
                print("[Eror] Shipment details are empty!")
@@ -64,18 +67,17 @@ def chat(request):
                 }
 
             
-            if pref_lang == 'ar': 
-                shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
-            else:
-                shipment_details =  get_shipment_data(rand_mode=False, shipment_id=shipment_id)
+            shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            # if pref_lang == 'ar': 
+            # else:
+            #     shipment_details =  get_shipment_data(rand_mode=False, shipment_id=shipment_id)
                 
             if pref_lang == 'ar':
                 notifications['shipment_status_updates'] = f" حاوية {shipment_details['Container']} قد غادر المنفذ"
                 
             
-            
-            greet_res = generate_response_main(input_gred, fuc, fuc_name, greet_role)['message']
-            suggestion_res = generate_response_main(input_shipment, fuc, fuc_name, sugg_role)
+            greet_res = generate_response_main(input_gred, fuc_greet, fuc_name_greet, greet_role)['message']
+            suggestion_res = generate_response_main(input_shipment, fuc_sugg, fuc_name_sugg, sugg_role)
             
             result = {
                 "delivery_details": shipment_details,
@@ -83,6 +85,7 @@ def chat(request):
                 "shipment_suggestion": suggestion_res,
                 "notifications": notifications,
             }
+            result["shipment_suggestion"]["Port"] = result["shipment_suggestion"]["sugg_route"]
             print("\n\n[Response Generated] (1st):", result)
             
         if isinstance(response_value, dict) and isinstance(response_value['user_input'], str):
@@ -103,10 +106,11 @@ def chat(request):
             
             
 
-            if pref_lang == 'ar': 
-                shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
-            else:
-                shipment_details = get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])
+            shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            # if pref_lang == 'ar': 
+            # shipment_details = trans_to_shipment_ar(shipment_details, pref_lang)
+            # else:
+            #     shipment_details = get_shipment_data(rand_mode=False, shipment_id=response_value['shipment_id'])
             
             
             
@@ -159,8 +163,8 @@ def chat(request):
                 "shipment_details": shipment_details,
                 "notifications": notifications,
             }
-
-            update_shipment_entry(shipment_details, 'en')
+            if ActionAccepted:
+                update_shipment_entry(shipment_details, pref_lang)
             print("\n\n[Generated Response] 2nd:", result)
             
         # Final response with CORS headers

@@ -243,11 +243,10 @@ def generate_response_main(input, fuc, fuc_name, role, api_key_file = "./ai_core
     
     # Generate response
     res = generate_response(client, conversation, fuc, fuc_name)
-    print(res)
-    # res_text = res.choices[0].message.content
     fuc_res = json.loads(res.choices[0].message.function_call.arguments)
-    # conversation.append({"role": "assistant", "content": res_text})
-    # return res
+    # res_text = res.choices[0].message.content
+
+    # print(res)
     return fuc_res
 
 
