@@ -5,8 +5,12 @@ import json
 import os
 from datetime import datetime
 import pytz
-from ai_core.scripts.helper_methods import flatten_input_dict
-from ai_core.scripts.prepare_conversation import get_conversation
+# from ai_core.scripts.helper_methods import flatten_input_dict
+# from ai_core.scripts.prepare_conversation import get_conversation
+
+from helper_methods import flatten_input_dict
+from prepare_conversation import get_conversation
+from data_prep_tuning import greet_sys_role, sugg_sys_role, action_sys_role
 
 def get_api_key(file_path):
     if os.path.exists(file_path):
@@ -20,8 +24,8 @@ def get_api_key(file_path):
 def generate_response(client, messages, my_function, my_fuc_name, max_tokens=700, temperature=0.8):
     functions = my_function if isinstance(my_function, list) else [my_function]
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        # model="gpt-4-turbo",
+        model="ft:gpt-3.5-turbo-1106:personal:nova-v2:BZEOZFby",
+        # model="gpt-3.5-turbo",
         messages=messages,
         functions=functions,
         function_call=my_fuc_name,
@@ -45,9 +49,9 @@ def generate_port_shipment_data(file_path = "./ai_core/outputs/shipment_data.jso
             shipment = {
                 'DeliveryID': f'DEL-2025-{i+1:03}',
                 'Port': port,
-                'Container': f'CONT-{random.randint(100000, 999999)}',
                 'ETA': f"{random.randint(4, 5)}h {random.randint(0, 59)}m",
                 'Status': random.choices(['Delayed', 'Pending'], weights=[0.5, 0.5])[0],
+                'Impact': random.choice(['Port congestion', 'Severe weather forecast', 'Maintenance activity', 'Customs clearance delay', 'Limited container slots']),
                 'Route': random.choice(ports),
                 'RerouteOptions': random.sample([p for p in ports if p != port], 2)
             }
@@ -121,12 +125,12 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
                     "type": "string",
                     "description": "Shipment update message explaining the current status and recommendation."
                 },
-                "port": {
+                "sugg_route": {
                     "type": "string",
                     "description": "Recommended port for rerouting the shipment."
                 }
             },
-            "required": ["message", "port"]
+            "required": ["message", "sugg_route"]
         }
     }
 
@@ -147,11 +151,16 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
                 },
                 "message": {
                     "type": "string",
-                    "description": "Confirmation message detailing the final action taken or skipped."
+                    "description": "Confirmation message detailing the final action taken or skipped. either false"
+                },
+                "sugg_route": {
+                    "type": "string",
+                    "description": "User overwritten, recommended port for rerouting the shipment"
                 }
             },
-            "required": ["ActionAccepted", "Status", "message"]
+            "required": ["ActionAccepted", "Status", "message", "sugg_route"]
         }
+        
     }
     
     final_functions = {}
@@ -166,12 +175,13 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
     lang = details.get("Language")
     input = {}
     shipment_details = {}
+    cur_role = None
     
     if mode == 'greeting':
+        cur_role = greet_sys_role
         kuwait_time_str = datetime.now(pytz.timezone('Asia/Kuwait')).strftime('%Y-%m-%d %H:%M:%S')
         input =  {
-            "mode": "Prod",
-            "tone": "No suggestions no approvals abou the shipment specific details",
+            # "mode": "Prod",
             "Language": lang,
             "context": "greeting",
             "conditions": {
@@ -181,13 +191,14 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
         final_functions = f_call_greet
         
     if mode == 'shipment_suggestion':
+        cur_role = sugg_sys_role
         if shipment_id is None:
             shipment_details = get_shipment_data()
         else:    
             shipment_details = get_shipment_data(rand_mode=False, shipment_id=shipment_id)
             
         input =  {
-            "mode": "Prod",
+            # "mode": "Prod",
             "Language": lang,
             "context": "shipment_suggestion",
             "conditions": shipment_details
@@ -196,9 +207,10 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
     
     if mode == 'action_response':
         
+        cur_role = action_sys_role
         shipment_details = get_shipment_data(rand_mode=False, shipment_id=shipment_id)
         input =  {
-            "mode": "Prod",
+            # "mode": "Prod",
             "Language": lang,
             "context": "action_response",
             "DateTime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -208,12 +220,13 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
         }
         final_functions = f_call_action
     
-    return input, shipment_details, final_functions, {"name": mode}
+    return input, shipment_details, final_functions, {"name": mode}, cur_role
     
     
-def generate_response_main(input, fuc, fuc_name, api_key_file = "./ai_core/inputs/gpt_api_key.json"):
+def generate_response_main(input, fuc, fuc_name, role, api_key_file = "./ai_core/inputs/gpt_api_key.json"):
     
     conversation = get_conversation()
+    conversation = []
     # print(conversation)
     API_kEY = get_api_key(api_key_file)
 
@@ -221,6 +234,7 @@ def generate_response_main(input, fuc, fuc_name, api_key_file = "./ai_core/input
 
         
     # Add user input
+    conversation.append({"role": "system", "content": role})
     conversation.append({"role": "user", "content": flatten_input_dict(input)})
     
     # Generate response
@@ -229,28 +243,35 @@ def generate_response_main(input, fuc, fuc_name, api_key_file = "./ai_core/input
     # res_text = res.choices[0].message.content
     fuc_res = json.loads(res.choices[0].message.function_call.arguments)
     # conversation.append({"role": "assistant", "content": res_text})
+    # return res
     return fuc_res
 
 
-# if __name__ == "__main__":
-#     try:
-#         key_file = "ai_core/inputs/gpt_api_key.json"
-#         ship_data_file = "ai_core/outputs/shipment_data.json"
+if __name__ == "__main__":
+    try:
+        key_file = "ai_core/inputs/gpt_api_key.json"
+        ship_data_file = "ai_core/outputs/shipment_data.json"
         
-#         input_greet, ship_details, fuc, fuc_name = process_input(details={"mode": "greeting"}, shipment_id=None, shipment_json_data_file=ship_data_file, gen_shipment_data=True)
-#         fuc_res = generate_response_main(input_greet, fuc, fuc_name, api_key_file=key_file)
+        input_greet, ship_details, fuc, fuc_name, curr_role = process_input(details={"mode": "greeting"}, shipment_id=None, shipment_json_data_file=ship_data_file, gen_shipment_data=True)
+        fuc_res = generate_response_main(input_greet, fuc, fuc_name, curr_role, api_key_file=key_file)
+        print(fuc_res)
+        input_thing, ship_details, fuc, fuc_name, curr_role = process_input(details={"mode": "shipment_suggestion"}, shipment_id=None, shipment_json_data_file=ship_data_file, gen_shipment_data=False)
+        print(ship_details)
+        fuc_res = generate_response_main(input_thing, fuc, fuc_name, curr_role,  api_key_file=key_file)
+        print(fuc_res)
         
-#         input_thing, ship_details, fuc, fuc_name = process_input(details={"mode": "shipment_suggestion"}, shipment_id=None, shipment_json_data_file=ship_data_file, gen_shipment_data=False)
-#         fuc_res = generate_response_main(input_thing, fuc, fuc_name, api_key_file=key_file)
+        input = "yes thats right."
+        # input = "how are you buddyt."
+        # input = "reroute it to Shuaiba route."
+        input = "can you tell me a joke"
         
-#         input = "yes thats right."
-#         input = "how are you buddyt."
-#         id = ship_details["DeliveryID"]
-#         suggested = fuc_res["port"]
-#         # print(id)
-#         # print(suggested)
-#         input_acc, ship_details, fuc, fuc_name = process_input(details={"mode": "action_response", "user_response": input, "suggested_port": suggested}, shipment_id=id, shipment_json_data_file=ship_data_file, gen_shipment_data=False)
-#         fuc_res = generate_response_main(input_acc, fuc, fuc_name, api_key_file=key_file)
+        id = ship_details["DeliveryID"]
+        suggested = "Doha Port"
+        suggested = fuc_res["sugg_route"]
 
-#     except Exception as e:
-#         raise e
+        input_acc, ship_details, fuc, fuc_name, curr_role = process_input(details={"mode": "action_response", "user_response": input, "suggested_port": suggested}, shipment_id=id, shipment_json_data_file=ship_data_file, gen_shipment_data=False)
+        fuc_res = generate_response_main(input_acc, fuc, fuc_name, curr_role, api_key_file=key_file)
+        print(fuc_res)
+
+    except Exception as e:
+        raise e

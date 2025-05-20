@@ -1,4 +1,5 @@
-from ai_core.scripts.helper_methods import flatten_input_dict
+# from ai_core.scripts.helper_methods import flatten_input_dict
+from helper_methods import flatten_input_dict
 import json
 
 system_role = (
