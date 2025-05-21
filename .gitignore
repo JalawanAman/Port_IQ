@@ -1,6 +1,11 @@
 # Ignore input/output API secrets or data
 ai_core/inputs/gpt_api_key.json
 
+
+# Ignore input/output API secrets or data
+ai_core/outputs/shipment_data.json
+
+
 # Ignore Python bytecode and cache files
 __pycache__/
 *.py[cod]

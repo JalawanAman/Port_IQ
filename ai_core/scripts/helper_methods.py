@@ -91,6 +91,8 @@ def update_shipment_entry( updated_entry, tar_lang,  file_path="./ai_core/output
 
 
 def get_translation(value: str, target_lang: str) -> str:
+    print("Given valu: ", value, " Lang: ", target_lang)
+    
     translations = {
         # English to Arabic
         'Shuwaikh Port': 'ميناء شويخ',
@@ -113,10 +115,14 @@ def get_translation(value: str, target_lang: str) -> str:
         return any('\u0600' <= char <= '\u06FF' for char in text)
 
     if target_lang == 'ar' and is_arabic(value):
+        print("Returned valu Already Arabic: ", value, " Lang: ", target_lang)
         return value  # Already Arabic
     elif target_lang == 'en' and not is_arabic(value):
+        print("Returned valu Already English: ", value, " Lang: ", target_lang)
         return value  # Already English
 
+    print("Returned valu: ", translations.get(value, value), " Lang: ", target_lang)
+    
     return translations.get(value, value)  # Translate if possible, else return original
 
 
@@ -131,14 +137,15 @@ def to_ar(given, prefferd_lang='ar'):
 def trans_to_shipment_ar(shipment_details, tar_lang):
     
     try:
-        print(f"shipment_details Given: {shipment_details} ------- Target lang: {tar_lang}\n")
+        # print(f"shipment_details Given: {shipment_details} ------- Target lang: {tar_lang}\n")
         
         shipment_details['Port'] = get_translation(shipment_details['Port'], tar_lang)
         shipment_details['Status'] = get_translation(shipment_details['Status'], tar_lang)
         # print(shipment_details['Route']," : ",get_translation(shipment_details['Route'], tar_lang))
         shipment_details['Route'] = get_translation(shipment_details['Route'], tar_lang)
         
-        print(f"shipment_details returned: {shipment_details} ------- Target lang: {tar_lang}\n")
+        # print(f"shipment_details returned: {shipment_details} ------- Target lang: {tar_lang}\n")
+        
         # shipment_details['Port'] = to_ar(shipment_details['Port'], tar_lang)
         # shipment_details['Status'] = to_ar(shipment_details['Status'], tar_lang)
         # print(shipment_details['Route']," : ",to_ar(shipment_details['Route'], tar_lang))

@@ -47,16 +47,27 @@ def generate_port_shipment_data(file_path = "./ai_core/outputs/shipment_data.jso
         ports = ['Shuwaikh Port', 'Shuaiba Port', 'Doha Port']
         for i in range(500):
             port = random.choice(ports)
+            route = random.choice(ports)
+
+            # Only exclude the current route from reroute options
+            reroute_candidates = [p for p in ports if p != route]
+            reroute_options = random.sample(reroute_candidates, 2)
+
             shipment = {
                 'DeliveryID': f'DEL-2025-{i+1:03}',
                 'Port': port,
                 'Container': f'CONT-{random.randint(100000, 999999)}',
                 'ETA': f"{random.randint(4, 5)}h {random.randint(0, 59)}m",
                 'Status': random.choices(['Delayed', 'Pending'], weights=[0.5, 0.5])[0],
-                'Impact': random.choice(['Port congestion', 'Severe weather forecast', 'Maintenance activity', 'Customs clearance delay', 'Limited container slots']),
-                'Route': random.choice(ports),
-                'RerouteOptions': random.sample([p for p in ports if p != port], 2)
+                'Impact': random.choice([
+                    'Port congestion', 'Severe weather forecast',
+                    'Maintenance activity', 'Customs clearance delay',
+                    'Limited container slots'
+                ]),
+                'Route': route,
+                'RerouteOptions': reroute_options
             }
+
             shipments.append(shipment)
             
         # Save to JSON file
@@ -66,6 +77,7 @@ def generate_port_shipment_data(file_path = "./ai_core/outputs/shipment_data.jso
         return True
     except Exception as e:
         raise e
+
     
 def get_shipment_data(file_path="./ai_core/outputs/shipment_data.json", rand_mode=True, shipment_id=None):
     # Load the JSON data from file
@@ -192,7 +204,6 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
         }
         final_functions = f_call_greet
     
-    print("Given lang: ",lang)
             
     if mode == 'shipment_suggestion':
         cur_role = sugg_sys_role
@@ -246,6 +257,7 @@ def generate_response_main(input, fuc, fuc_name, role, api_key_file = "./ai_core
     fuc_res = json.loads(res.choices[0].message.function_call.arguments)
     # res_text = res.choices[0].message.content
 
+    print("-----***** except InternalServerError as e: ******------")
     # print(res)
     return fuc_res
 
