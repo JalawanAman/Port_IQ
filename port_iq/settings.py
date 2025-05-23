@@ -27,7 +27,7 @@ DEBUG = True
 
 # ALLOWED_HOSTS = ['192.168.1.3', 'localhost', '127.0.0.1']
 
-ALLOWED_HOSTS = ['portiq.croncore.com', 'localhost', '127.0.0.1', '16.171.1.191']
+ALLOWED_HOSTS = ['portiq.croncore.com', 'localhost', '127.0.0.1', '84.8.114.153']
 
 
 

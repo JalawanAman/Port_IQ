@@ -6,7 +6,6 @@ import os
 from datetime import datetime
 import pytz
 from ai_core.scripts.helper_methods import flatten_input_dict
-from ai_core.scripts.prepare_conversation import get_conversation
 from ai_core.scripts.data_prep_tuning import greet_sys_role, sugg_sys_role, action_sys_role
 
 # from helper_methods import flatten_input_dict
@@ -240,13 +239,11 @@ def process_input(details, shipment_id, shipment_json_data_file = "./ai_core/out
     
 def generate_response_main(input, fuc, fuc_name, role, api_key_file = "./ai_core/inputs/gpt_api_key.json"):
     
-    conversation = get_conversation()
     conversation = []
     # print(conversation)
     API_kEY = get_api_key(api_key_file)
 
     client = openai.OpenAI(api_key=API_kEY)
-
         
     # Add user input
     conversation.append({"role": "system", "content": role})

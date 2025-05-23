@@ -889,29 +889,29 @@ predefined_messages = [
 
 
 
-def get_conversation():
-    try:
+# def get_conversation():
+#     try:
 
         
         
-        conversation = []
+#         conversation = []
 
-        conversation.append({"role": "system", "content": system_role})
-        for message in predefined_messages:
+#         conversation.append({"role": "system", "content": system_role})
+#         for message in predefined_messages:
         
-            user_input_flat = flatten_input_dict(message["input"])
-            response_flat = (
-                                json.dumps(message["response"]) 
-                                if isinstance(message["response"], dict) 
-                                else message["response"]
-                            )
-            conversation.append({"role": "user", "content": user_input_flat })
-            conversation.append({"role": "assistant", "content": None, "function_call": { "name": message["input"]['context'], "arguments": response_flat } })
+#             user_input_flat = flatten_input_dict(message["input"])
+#             response_flat = (
+#                                 json.dumps(message["response"]) 
+#                                 if isinstance(message["response"], dict) 
+#                                 else message["response"]
+#                             )
+#             conversation.append({"role": "user", "content": user_input_flat })
+#             conversation.append({"role": "assistant", "content": None, "function_call": { "name": message["input"]['context'], "arguments": response_flat } })
         
-        return conversation
+#         return conversation
 
-    except Exception as e:
-        print(f"Error preparing conversation: {e}")
-        return False
+#     except Exception as e:
+#         print(f"Error preparing conversation: {e}")
+#         return False
 
 
